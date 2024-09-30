@@ -78,6 +78,7 @@ struct GenerateView: View {
 
         let homeURL = FileManager.default.homeDirectoryForCurrentUser
         let solvedUrl = homeURL.appending(path: "\(filenameString)_\(saveCount)_solved.pdf")
+        print("Solved File: \(solvedUrl.absoluteString)")
         let unsolvedUrl = homeURL.appending(path: "\(filenameString)_\(saveCount)_puzzle.pdf")
         let textUrl = homeURL.appending(path: "\(filenameString)_\(saveCount)_puzzle.txt")
         saveText(url: textUrl)
