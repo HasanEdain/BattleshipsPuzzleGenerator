@@ -8,17 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var puzzle: Puzzle
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        GenerateView()
+    }
+
+    func printEmpty() {
+        let emptyPuzzle = Puzzle.emptyPuzzle(width: 10, height: 10)
+        print("\(emptyPuzzle)")
     }
 }
 
 #Preview {
+    let emptyPuzzle: Puzzle = Puzzle.emptyPuzzle(width: 10, height: 10)
+
     ContentView()
+        .environmentObject(emptyPuzzle)
 }
