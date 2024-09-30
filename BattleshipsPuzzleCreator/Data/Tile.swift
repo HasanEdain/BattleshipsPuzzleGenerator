@@ -7,11 +7,15 @@
 
 import Foundation
 
-class Tile: ObservableObject, Codable {
+class Tile: ObservableObject, Codable, CustomDebugStringConvertible {
     @Published var type: TileType
 
     init(type: TileType) {
         self.type = type
+    }
+
+    var debugDescription: String {
+        return type.debugDescription
     }
 
     static func empty() -> Tile {

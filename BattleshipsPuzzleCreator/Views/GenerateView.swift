@@ -79,13 +79,13 @@ struct GenerateView: View {
         let homeURL = FileManager.default.homeDirectoryForCurrentUser
         let solvedUrl = homeURL.appending(path: "\(filenameString)_\(saveCount)_solved.pdf")
         let unsolvedUrl = homeURL.appending(path: "\(filenameString)_\(saveCount)_puzzle.pdf")
-//        let textUrl = homeURL.appending(path: "\(filenameString)_\(saveCount)_puzzle.txt")
-//        saveText(url: textUrl)
+        let textUrl = homeURL.appending(path: "\(filenameString)_\(saveCount)_puzzle.txt")
+        saveText(url: textUrl)
 
         rendererSolved.render { size, renderInContext in
             var box = CGRect(
                 origin: .zero,
-                size: .init(width: CGFloat(9*48), height: CGFloat(9*48))
+                size: .init(width: CGFloat(puzzle.width*24 + 30), height: CGFloat(puzzle.height * 24 + 30))
             )
 
             guard let context = CGContext(solvedUrl as CFURL, mediaBox: &box, nil) else {
@@ -101,7 +101,7 @@ struct GenerateView: View {
         redererPuzzle.render { size, renderInContext in
             var box = CGRect(
                 origin: .zero,
-                size: .init(width: CGFloat(9*48), height: CGFloat(9*48))
+                size: .init(width: CGFloat(puzzle.width*24 + 30), height: CGFloat(puzzle.height*24 + 30))
             )
 
             guard let context = CGContext(unsolvedUrl as CFURL, mediaBox: &box, nil) else {
@@ -119,13 +119,30 @@ struct GenerateView: View {
     }
 
     @ViewBuilder var solvedPuzzleView: some View {
-        PuzzleView(showPuzzle: true, showWater: false)
+        PuzzleAndCluesView(showShips: true, showWater: false)
             .environmentObject(puzzle)
     }
 
     @ViewBuilder var puzzleView: some View {
-        PuzzleView(showPuzzle: false, showWater: false)
+        PuzzleAndCluesView(showShips: false, showWater: false)
             .environmentObject(puzzle)
+    }
+
+    func saveText(url: URL) {
+            // Create data to be saved
+        let myString = puzzle.debugDescription
+        guard let data = myString.data(using: .utf8) else {
+            print("Unable to convert string to data")
+            return
+        }
+            // Save the data
+        do {
+            try data.write(to: url)
+            print("File saved: \(url.absoluteURL)")
+        } catch {
+                // Catch any errors
+            print(error.localizedDescription)
+        }
     }
 }
 
